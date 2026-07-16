@@ -1,5 +1,7 @@
-use std::{ process::Command};
+use std::{ io};
 mod init;
-fn main()  {
-    init::create_pisa_enviorment();
+fn main() -> io::Result<()>  {
+    init::create_pisa_enviorment()?;
+
+    Ok(())
 }
