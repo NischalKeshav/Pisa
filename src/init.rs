@@ -1,24 +1,21 @@
 use std::fs;
 use std::io;
-use std::os::unix::fs::PermissionsExt;
+
+use crate::pisa_enviorment;
 pub fn create_pisa_enviorment() -> io::Result<()> {
     // Create Pisa Enviorment for all important files and folders
     // TODO: use a enviormental .toml file for these variables
     let enviorment_directory = "./.pisa";
     fs::create_dir(enviorment_directory).ok();
     let activate_script_path = format!("{}/activate", enviorment_directory);
-
+    let deactivate_script_path = format!("{}/deactivate", enviorment_directory);
 
     // Activation script
     generate_activate_script(&activate_script_path)?;   
-
-    let mut perms = match fs::metadata(activate_script_path.clone()){
-        Err(e) => panic!("Unable to get file metadata {:?}", e),
-        Ok(f) => f.permissions(),
-    };
-    perms.set_mode(perms.mode() | 0o111);
-    fs::set_permissions(activate_script_path, perms)?;
-    
+    pisa_enviorment::chmod_exec(activate_script_path)?; 
+    // Deactivation script
+    generate_deactivate_script(&deactivate_script_path)?;    
+    pisa_enviorment::chmod_exec(deactivate_script_path)?;    
 
 
     Ok(())
