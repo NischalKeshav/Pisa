@@ -23,10 +23,7 @@ pub fn create_pisa_enviorment() -> io::Result<()> {
 
 
 pub fn generate_activate_script(relative_file_path: &String) -> io::Result<()>{
-    let activate_script:String = " export PS1_org=$PS1
-    export PS1=(Pisa)$PS1 
-        ".to_string();
-
+    let activate_script:&str= pisa_enviorment::get_template("activate").ok_or();
     fs::write(relative_file_path, activate_script).unwrap();
     Ok(())
 

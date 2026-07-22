@@ -14,3 +14,15 @@ pub fn chmod_exec(relative_file_path: String) -> io::Result<()> {
  
     Ok(())
 }
+const ACTIVATE: &str = include_str!("../assets/activate");
+//const CONFIG: &str = include_str!("../assets/config.toml");
+//const GITIGNORE: &str = include_str!("../assets/gitignore");
+
+pub fn get_template(name: &str) -> Result<&'static str,()> {
+    match name {
+        "activate" => Ok(ACTIVATE),
+        //"config.toml" => Ok(CONFIG),
+        //"gitignore" => Ok(GITIGNORE),
+        _ => Err(()),
+    }
+}

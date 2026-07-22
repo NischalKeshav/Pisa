@@ -1,0 +1,9 @@
+ export PS1_org=$PS1
+    if [ -z \"${BASH_VERSION-}\" ]; then
+    echo \"Only Bash is currently Supported\"
+    return 1
+fi
+
+export PS1=(Pisa)$PS1 
+source ~/.bash-preexec.sh
+
