@@ -16,6 +16,7 @@ pub fn create_pisa_enviorment() -> io::Result<()> {
     // Deactivation script
     generate_deactivate_script(&deactivate_script_path)?;    
     pisa_enviorment::chmod_exec(deactivate_script_path)?;    
+    
 
 
     Ok(())
@@ -23,23 +24,44 @@ pub fn create_pisa_enviorment() -> io::Result<()> {
 
 
 pub fn generate_activate_script(relative_file_path: &String) -> io::Result<()>{
-    let activate_script:String = " export PS1_org=$PS1
-    export PS1=(Pisa)$PS1 
-        ".to_string();
+    let activate_script = r#"#!/usr/bin/env bash
+# Source this file to change the current shell's prompt.
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+    echo "Use: source ${BASH_SOURCE[0]}" >&2
+    exit 1
+fi
 
-    fs::write(relative_file_path, activate_script).unwrap();
-    Ok(())
+deactivate() {
+    if [[ -n "${_PISA_OLD_PS1+x}" ]]; then
+        PS1="$_PISA_OLD_PS1"
+        unset _PISA_OLD_PS1
+    fi
+    unset -f deactivate
+}
+
+if [[ -z "${_PISA_OLD_PS1+x}" ]]; then
+    _PISA_OLD_PS1="${PS1-}"
+    PS1="(Pisa) ${PS1-}"
+fi
+"#;
+
+    fs::write(relative_file_path, activate_script)
 
 }
 
 pub fn generate_deactivate_script(relative_file_path: &String) -> io::Result<()>{
-    let activate_script:String = "export PS1=$PS1_org \n".to_string();
+    let deactivate_script = r#"#!/usr/bin/env bash
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+    echo "Use: source ${BASH_SOURCE[0]}" >&2
+    exit 1
+fi
 
-    fs::write(relative_file_path, activate_script).unwrap();
-    Ok(())
+if declare -F deactivate >/dev/null; then
+    deactivate
+fi
+"#;
+
+    fs::write(relative_file_path, deactivate_script)
 
 }
-
-
-
 
