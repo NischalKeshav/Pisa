@@ -1,8 +1,6 @@
 System Dependencies:
 bash-preexec
 
-Generate the Bash activation scripts with `cargo run`, then activate the
-`(Pisa)` terminal prompt in your current shell:
 
 ```bash
 source .pisa/activate

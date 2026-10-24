@@ -4,8 +4,7 @@ use std::io;
 use crate::pisa_enviorment;
 pub fn create_pisa_enviorment() -> io::Result<()> {
     // Create Pisa Enviorment for all important files and folders
-    // TODO: use a enviormental .toml file for these variables
-    let enviorment_directory = "./.pisa";
+    let enviorment_directory = env!("PISA_BINARY_PATH");
     fs::create_dir(enviorment_directory).ok();
     let activate_script_path = format!("{}/activate", enviorment_directory);
     let deactivate_script_path = format!("{}/deactivate", enviorment_directory);

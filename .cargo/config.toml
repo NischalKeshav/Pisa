@@ -1,0 +1,3 @@
+[env]
+PISA_ENVIORMENT_NAME = "Pisa"
+PISA_BINARY_PATH = "/home/nischalkeshav/Coding/Pisa/target/debug/R-Pisa"
